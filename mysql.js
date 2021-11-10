@@ -186,3 +186,5 @@ router.get('/actualizarDocente', (req,res) => {
         res.send(err);
     })
 });
+
+module.exports = router;
