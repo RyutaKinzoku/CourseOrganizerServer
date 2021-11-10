@@ -20,11 +20,11 @@ router.use(bodyParser.urlencoded({extended: true}));
 //Usuario
 router.get('/iniciarSesion', (req,res) => {
     const sql = "select email, contrasena from Usuario where email = ?"
-    db.query(sql, [req.query.correo, req.query.contrasena], (err, result) => {
+    db.query(sql, [req.query.correo], (err, result) => {
         if(err){
             res.send(err);
         } else {
-            res.send(result.length > 0 && result.first[1] == req.query.contrasena);
+            res.send(result.length > 0 && result.data[0].contrasena == req.query.contrasena);
         }
     })
 });
