@@ -11,3 +11,7 @@ app.use('/api', require('./mysql.js'));
 
 app.listen(3001, () =>
     console.log("running on port 3001"));
+
+app.get('/', (_,res) => {
+    res.send('Conexión a bases de datos')
+});
