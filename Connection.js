@@ -10,12 +10,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 app.use('/api', require('./mysql.js'));
 
-app.listen(3001, () =>
-    console.log("running on port 3001"));
+const port = process.env.PORT || 3000
 
-app.get('/', (_,res) => {
-    res.send('Conexión a bases de datos')
-});
+app.listen(port, () =>
+    console.log(`running on port ${port}`));
 
 const db = mysql.createPool({
     host : "remotemysql.com",
@@ -25,13 +23,17 @@ const db = mysql.createPool({
     database: "ufqeeBEoYK"
 });
 
-app.get('/iniciarSesion', (req,res) => {
+app.get('/', (_,res) => {
+    res.send('Conexión a MySQL')
+});
+
+app.get('/obtenerUsuario', (req,res) => {
     const sql = "select * from Usuario where email = ?"
     db.query(sql, [req.query.correo], (err, result) => {
         if(err){
             res.send(err);
         } else {
-            res.send(result);
+            res.send(result[0]);
         }
     })
 });
