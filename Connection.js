@@ -30,11 +30,11 @@ app.get('/', (_,res) => {
 //Usuario
 app.get('/iniciarSesion', (req,res) => {
     const sql = "select email, contrasena from Usuario where email = ?"
-    db.query(sql, [req.query.correo], (err, result) => {
+    db.query(sql, [req.query.correo], async(err, result) => {
         if(err){
             res.send(err);
         } else {
-            res.send(result.data.length > 0 && result.data[0].contrasena == req.query.contrasena);
+            res.send(result.length > 0 && result[0].contrasena == req.query.contrasena);
         }
     })
 });
