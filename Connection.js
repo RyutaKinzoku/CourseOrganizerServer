@@ -148,7 +148,7 @@ app.get('/obtenerDocente', (req,res) => {
 
 app.get('/obtenerDocentes', (req,res) => {
     const sql = "select * from Docente"
-    db.query(sql, [req.query.cedula], (err, result) => {
+    db.query(sql, (err, result) => {
         if(err){
             res.send(err);
         } else {
@@ -285,7 +285,7 @@ app.get('/obtenerEstudiante', (req,res) => {
 
 app.get('/obtenerEstudiantes', (req,res) => {
     const sql = "select * from Estudiante"
-    db.query(sql, [req.query.cedula], (err, result) => {
+    db.query(sql, (err, result) => {
         if(err){
             res.send(err);
         } else {
@@ -308,5 +308,135 @@ app.put('/actualizarEstudiante', (req,res) => {
     sql = "update Persona set nombre = ?, primerApellido = ?, segundoApellido = ? where cedula = ?;"
     db.query(sql, [nombre, primerApellido, segundoApellido, cedula], (err, _) => {
         res.send(err);
+    })
+});
+
+//Cursos
+app.post("/crearCurso ", (req,res) =>{
+    var idCurso;
+    var sql = "insert into Curso (nombre, gradoEscolar) values (?, ?); SELECT LAST_INSERT_ID()";
+    db.query(sql , [req.query.nombre, req.query.grado] ,(err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            idCurso = result;
+        }
+    })
+
+    sql = "insert into CursoPorDia (ID_Curso, dia, horaInicio, horaFin) values (?, ?, ?, ?)";
+
+    for(const t of req.query.horario){
+        var partes = t.split(" ");
+        db.query(sql , [idCurso, partes[1], partes[2], partes[3]] ,(err, _) => {
+            if(err){
+                res.send(err);
+            }
+        })
+    }
+});
+
+app.post("/borrarCurso", (req,res) =>{
+    const idCurso = req.body.idCurso 
+    var email;
+    var sql = "delete from Tarea where ID_Curso = ?";
+    db.query(sql , [idCurso] ,(err, _) => {
+        if(err){
+            res.send(err);
+        }
+    })
+
+    sql = "delete from Mensaje where ID_Curso = ?";
+    db.query(sql , [idCurso] ,(err, _) => {
+        if(err){
+            res.send(err);
+        }
+    })
+
+    sql = "delete from Noticia where ID_Curso = ?";
+    db.query(sql , [idCurso] ,(err, _) => {
+        if(err){
+            res.send(err);
+        }
+    })
+
+    sql = "delete from CursoPorDia where ID_Curso = ?";
+    db.query(sql , [idCurso] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+
+    sql = "delete from EstudiantePorCurso where ID_Curso = ?";
+    db.query(sql , [idCurso] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+
+    sql = "delete from Curso where ID_Curso = ?";
+    db.query(sql , [idCurso] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+});
+
+app.get('/obtenerCurso', (req,res) => {
+    const sql = "select * from Curso where ID_Curso = ?"
+    db.query(sql, [req.query.idCurso], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            sql = "select * from CursoPorDia where ID_Curso = ?"
+            db.query(sql, [req.query.idCurso], (err, resulta) => {
+                if(err){
+                    res.send(err);
+                } else {
+                    res.send([result[0], resulta]);
+                }
+            })
+        }
+    })
+});
+
+app.get('/obtenerCursos', (req,res) => {
+    var cursos = [];
+    const sql = "select * from Curso"
+    db.query(sql, (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            sql = "select * from CursoPorDia where ID_Curso = ?"
+            for(var curso of result){
+                db.query(sql, [curso[0]], (err, resulta) => {
+                    if(err){
+                        res.send(err);
+                    } else {
+                        cursos.push([curso, resulta]);
+                    }
+                })
+            }
+        }
+    })
+    res.send(cursos);
+});
+
+app.put('/actualizarCurso', (req,res) => {
+    const idCurso = req.body.idCurso;
+    const nombre = req.body.nombre; 
+    const grado = req.body.grado; 
+    const horario = req.body.horario; 
+    const sql = "update Curso set nombre = ?, gradoEscolar = ? where ID_Curso = ?"
+    db.query(sql, [nombre, grado, idCurso], (err, _) => {
+        if(err){
+            res.send(err);
+        } else {
+            sql = 'update CursoPorDia set dia = ?, horaInicio = ?, horaFin = ? where idCurso = ? and dia = "Martes"'
+            for(const t of req.query.horario){
+                var partes = t.split(" ");
+                db.query(sql , [idCurso, partes[0], partes[1], partes[2]] ,(err, _) => {
+                    if(err){
+                        res.send(err);
+                    }
+                })
+            }
+        }
     })
 });
