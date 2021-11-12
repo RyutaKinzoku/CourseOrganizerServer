@@ -27,6 +27,29 @@ app.get('/', (_,res) => {
     res.send('Conexión a MySQL')
 });
 
+//Usuario
+app.get('/iniciarSesion', (req,res) => {
+    const sql = "select email, contrasena from Usuario where email = ?"
+    db.query(sql, [req.query.correo], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result.data.length > 0 && result.data[0].contrasena == req.query.contrasena);
+        }
+    })
+});
+
+app.get('/obtenerRol', (req,res) => {
+    const sql = "select rol from Usuario where email = ?"
+    db.query(sql, [req.query.correo], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result[0]);
+        }
+    })
+});
+
 app.get('/obtenerUsuario', (req,res) => {
     const sql = "select * from Usuario where email = ?"
     db.query(sql, [req.query.correo], (err, result) => {

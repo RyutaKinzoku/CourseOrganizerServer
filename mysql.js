@@ -17,39 +17,6 @@ router.use(cors());
 router.use(express.json())
 router.use(bodyParser.urlencoded({extended: true}));
 
-//Usuario
-router.get('/iniciarSesion', (req,res) => {
-    const sql = "select email, contrasena from Usuario where email = ?"
-    db.query(sql, [req.query.correo], (err, result) => {
-        if(err){
-            res.send(err);
-        } else {
-            res.send(result.length > 0 && result.data[0].contrasena == req.query.contrasena);
-        }
-    })
-});
-
-router.get('/obtenerRol', (req,res) => {
-    const sql = "select rol from Usuario where email = ?"
-    db.query(sql, [req.query.correo], (err, result) => {
-        if(err){
-            res.send(err);
-        } else {
-            res.send(result[0]);
-        }
-    })
-});
-
-router.get('/obtenerUsuario', (req,res) => {
-    const sql = "select * from Usuario where email = ?"
-    db.query(sql, [req.query.correo], (err, result) => {
-        if(err){
-            res.send(err);
-        } else {
-            res.send(result[0]);
-        }
-    })
-});
 
 //Docente
 router.post("/crearDocente", (req,res) =>{
