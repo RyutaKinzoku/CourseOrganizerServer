@@ -197,7 +197,7 @@ app.put('/actualizarDocente', (req,res) => {
 });
 
 //Estudiante
-app.post("/crearEstudiante ", (req,res) =>{
+app.post("/crearEstudiante", (req,res) =>{
     const cedula = req.body.cedula
     const nombre = req.body.nombre
     const primerApellido = req.body.primerApellido
@@ -312,7 +312,7 @@ app.put('/actualizarEstudiante', (req,res) => {
 });
 
 //Cursos
-app.post("/crearCurso ", (req,res) =>{
+app.post("/crearCurso", (req,res) =>{
     var idCurso;
     var sql = "insert into Curso (nombre, gradoEscolar) values (?, ?); SELECT LAST_INSERT_ID()";
     db.query(sql , [req.query.nombre, req.query.grado] ,(err, result) => {
@@ -438,5 +438,58 @@ app.put('/actualizarCurso', (req,res) => {
                 })
             }
         }
+    })
+});
+
+//Tareas
+app.post("/crearTarea", (req,res) =>{
+    var descripcion = req.query.descripcion;
+    var fechaEntrega = req.query.fechaEntrega;
+    var idCurso = req.query.idCurso;
+    var titulo = req.query.titulo;
+    var sql = "insert into Tarea (descripcion, fechaEntrega, ID_Curso, titulo) values (?, ?, ?, ?)";
+    db.query(sql , [descripcion, fechaEntrega, idCurso, titulo] ,(err, _) => {
+        res.send(err);
+    })
+});
+
+app.post("/borrarTarea", (req,res) =>{
+    var sql = "delete from Tarea where ID_Tarea = ?";
+    db.query(sql , [req.body.idTarea] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+});
+
+app.get('/obtenerTarea', (req,res) => {
+    const sql = "select * from Tarea where ID_Tarea = ?"
+    db.query(sql, [req.query.idTarea], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result[0]);
+        }
+    })
+});
+
+app.get('/obtenerTareas', (req,res) => {
+    const sql = "select * from Tarea where ID_Curso = ?"
+    db.query(sql, [idCurso], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    })
+});
+
+app.put('/actualizarTarea', (req,res) => {
+    const idTarea = req.body.idTarea;
+    const descripcion = req.body.descripcion; 
+    const fechaEntrega = req.body.fechaEntrega; 
+    const titulo = req.body.titulo; 
+    const sql = "update Tarea set descripcion = ?, fechaEntrega = ?, titulo = ? where ID_Tarea = ?"
+    db.query(sql, [descripcion, fechaEntrega, titulo, idTarea], (err, _) => {
+        res.send(err);
     })
 });
