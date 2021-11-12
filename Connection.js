@@ -29,7 +29,7 @@ app.get('/', (_,res) => {
 //Usuario
 app.get('/iniciarSesion', (req,res) => {
     const sql = "select email, contrasena from Usuario where email = ?"
-    db.query(sql, [req.query.correo], async(err, result) => {
+    db.query(sql, [req.query.email], async(err, result) => {
         if(err){
             res.send(err);
         } else {
@@ -40,7 +40,7 @@ app.get('/iniciarSesion', (req,res) => {
 
 app.get('/obtenerRol', (req,res) => {
     const sql = "select rol from Usuario where email = ?"
-    db.query(sql, [req.query.correo], (err, result) => {
+    db.query(sql, [req.query.email], (err, result) => {
         if(err){
             res.send(err);
         } else {
@@ -51,7 +51,7 @@ app.get('/obtenerRol', (req,res) => {
 
 app.get('/obtenerUsuario', (req,res) => {
     const sql = "select * from Usuario where email = ?"
-    db.query(sql, [req.query.correo], (err, result) => {
+    db.query(sql, [req.query.email], (err, result) => {
         if(err){
             res.send(err);
         } else {
@@ -62,27 +62,27 @@ app.get('/obtenerUsuario', (req,res) => {
 
 //Docente
 app.post("/crearDocente", (req,res) =>{
-    const correo = req.body.correo 
+    const email = req.body.email 
     const contrasena = req.body.contrasena 
     const cedula = req.body.cedula 
     const nombre = req.body.nombre 
     const primerApellido = req.body.primerApellido 
     const segundoApellido = req.body.segundoApellido 
 
-    var sql = "INSERT INTO Usuario (correo, contrasena, rol) VALUES (?,?,?);";
-    db.query(sql , [correo, contrasena, "Docente"] ,(err, _) => {
+    var sql = "INSERT INTO Usuario (email, contrasena, rol) VALUES (?,?,?);";
+    db.query(sql , [email, contrasena, "Docente"] ,(err, _) => {
         console.log(err);
         res.send(err);
     })
 
-    sql = "INSERT INTO Persona (cedula, nombre, primerApellido, segundoApellido, correo) VALUES (?,?,?,?,?);";
-    db.query(sql , [cedula, nombre, primerApellido, segundoApellido, correo] ,(err, _) => {
+    sql = "INSERT INTO Persona (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
+    db.query(sql , [cedula, nombre, primerApellido, segundoApellido, email] ,(err, _) => {
         console.log(err);
         res.send(err);
     })
 
-    sql = "INSERT INTO Docente (cedula, nombre, primerApellido, segundoApellido, correo) VALUES (?,?,?,?,?);";
-    db.query(sql , [cedula, nombre, primerApellido, segundoApellido, correo] ,(err, _) => {
+    sql = "INSERT INTO Docente (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
+    db.query(sql , [cedula, nombre, primerApellido, segundoApellido, email] ,(err, _) => {
         console.log(err);
         res.send(err);
     })
@@ -113,7 +113,7 @@ app.post("/borrarDocente", (req,res) =>{
     })
 
     sql = "delete from Usuario where email = ?";
-    db.query(sql , [correo] ,(err, _) => {
+    db.query(sql , [email] ,(err, _) => {
         console.log(err);
         res.send(err);
     })
@@ -146,6 +146,17 @@ app.get('/obtenerDocente', (req,res) => {
     })
 });
 
+app.get('/obtenerDocentes', (req,res) => {
+    const sql = "select * from Docente"
+    db.query(sql, [req.query.cedula], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    })
+});
+
 app.put("/calificarDocente", (req,res) =>{
     var resultados;
     var sql = "select * from Calificacion where cedula_docente = ? and cedula_estudiante = ?";
@@ -169,8 +180,111 @@ app.put("/calificarDocente", (req,res) =>{
     }
 });
 
-app.get('/obtenerDocentes', (req,res) => {
-    const sql = "select * from Docente"
+app.put('/actualizarDocente', (req,res) => {
+    const nombre = req.body.nombre; 
+    const primerApellido = req.body.primerApellido; 
+    const segundoApellido = req.body.segundoApellido; 
+    const email = req.body.email; 
+    const cedula = req.body.cedula;
+    const sql = "update Docente set nombre = ?, primerApellido = ?, segundoApellido = ?, email = ? where cedula = ?;"
+    db.query(sql, [nombre, primerApellido, segundoApellido, email, cedula], (err, _) => {
+        res.send(err);
+    })
+    sql = "update Persona set nombre = ?, primerApellido = ?, segundoApellido = ? where cedula = ?;"
+    db.query(sql, [nombre, primerApellido, segundoApellido, cedula], (err, _) => {
+        res.send(err);
+    })
+});
+
+//Estudiante
+app.post("/crearEstudiante ", (req,res) =>{
+    const cedula = req.body.cedula
+    const nombre = req.body.nombre
+    const primerApellido = req.body.primerApellido
+    const segundoApellido = req.body.segundoApellido
+    const grado = req.body.grado
+    const email = req.body.email
+    const contrasena = req.body.contrasena 
+
+    var sql = "insert into Usuario (email, contrasena, rol) values (?, ?, ?)";
+    db.query(sql , [email, contrasena, "Estudiante"] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+
+    sql = "INSERT INTO Persona (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
+    db.query(sql , [cedula, nombre, primerApellido, segundoApellido, email] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+
+    sql = "INSERT INTO Estudiante (cedula, nombre, primerApellido, segundoApellido, gradoEscolar, email) VALUES (?,?,?,?,?,?);";
+    db.query(sql , [cedula, nombre, primerApellido, segundoApellido, grado, email] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+});
+
+app.post("/borrarEstudiante", (req,res) =>{
+    const cedula = req.body.cedula 
+    var email;
+    var sql = "delete from Estudiante where cedula = ?";
+    db.query(sql , [cedula] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+
+    sql = "select email from Persona where cedula = ?";
+    db.query(sql , [cedula] ,(err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            email = result[0];
+        }
+    })
+
+    sql = "delete from Persona where cedula = ?";
+    db.query(sql , [cedula] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+
+    sql = "delete from Usuario where email = ?";
+    db.query(sql , [email] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+});
+
+app.post("/asignarEstudiante", (req,res) =>{
+    const sql = "insert into EstudiantePorCurso (ID_Curso, cedulaEstudiante) values (?, ?)";
+    db.query(sql , [req.body.idCurso, req.body.cedulaEstudiante] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+});
+
+app.put("/retirarEstudiante", (req,res) =>{
+    const sql = "delete from EstudiantePorCurso where cedulaEstudiante = ? AND ID_Curso = ?";
+    db.query(sql , [req.body.cedulaEstudiante, req.body.idCurso] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+});
+
+app.get('/obtenerEstudiante', (req,res) => {
+    const sql = "select * from Estudiante where cedula = ?"
+    db.query(sql, [req.query.cedula], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result[0]);
+        }
+    })
+});
+
+app.get('/obtenerEstudiantes', (req,res) => {
+    const sql = "select * from Estudiante"
     db.query(sql, [req.query.cedula], (err, result) => {
         if(err){
             res.send(err);
@@ -180,14 +294,15 @@ app.get('/obtenerDocentes', (req,res) => {
     })
 });
 
-app.get('/actualizarDocente', (req,res) => {
+app.put('/actualizarEstudiante', (req,res) => {
+    const cedula = req.body.cedula;
     const nombre = req.body.nombre; 
     const primerApellido = req.body.primerApellido; 
     const segundoApellido = req.body.segundoApellido; 
+    const grado = req.body.grado; 
     const email = req.body.email; 
-    const cedula = req.body.cedula;
-    const sql = "update Docente set nombre = ?, primerApellido = ?, segundoApellido = ?, email = ? where cedula = ?;"
-    db.query(sql, [nombre, primerApellido, segundoApellido, email, cedula], (err, _) => {
+    const sql = "update Estudiante set nombre = ?, primerApellido = ?, segundoApellido = ?, gradoEscolar = ?, email = ? where cedula = ?;"
+    db.query(sql, [nombre, primerApellido, segundoApellido, email, grado, cedula], (err, _) => {
         res.send(err);
     })
     sql = "update Persona set nombre = ?, primerApellido = ?, segundoApellido = ? where cedula = ?;"
