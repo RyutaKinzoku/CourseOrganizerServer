@@ -441,6 +441,61 @@ app.put('/actualizarCurso', (req,res) => {
     })
 });
 
+app.get('/obtenerNombreDocenteDelCurso', (req,res) => {
+    const sql = "select Docente.cedula, Docente.nombre, Docente.primerApellido, Docente.segundoApellido FROM Curso INNER JOIN Docente ON Curso.cedulaDocente = Docente.cedula WHERE Curso.ID_Curso = ?"
+    db.query(sql, [req.query.idCurso], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result[0]);
+        }
+    })
+});
+
+app.get('/obtenerDocenteDelCurso', (req,res) => {
+    const sql = "select d.cedula, d.nombre, d.primerApellido, d.segundoApellido, AVG(ca.valor), d.email FROM Curso cu INNER JOIN Docente d ON cu.cedulaDocente = d.cedula INNER JOIN Calificacion ca ON d.cedula = ca.cedula_docente WHERE cu.ID_Curso = ? GROUP BY d.cedula"
+    db.query(sql, [req.query.idCurso], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result[0]);
+        }
+    })
+});
+
+app.get('/obtenerEstudiantesDelCurso', (req,res) => {
+    const sql = "SELECT Estudiante.cedula, Estudiante.nombre, Estudiante.primerApellido, Estudiante.segundoApellido FROM Curso INNER JOIN EstudiantePorCurso ON Curso.ID_Curso = EstudiantePorCurso.ID_Curso INNER JOIN Estudiante ON EstudiantePorCurso.cedulaEstudiante = Estudiante.cedula WHERE Curso.ID_Curso = ?"
+    db.query(sql, [req.query.idCurso], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    })
+});
+
+app.get('/obtenerCursosProfesor', (req,res) => {
+    const sql = "SELECT Curso.ID_Curso, Curso.nombre FROM Curso INNER JOIN Docente ON Curso.cedulaDocente = Docente.cedula WHERE Curso.cedulaDocente = ?"
+    db.query(sql, [req.query.cedula], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    })
+});
+
+app.get('/obtenerCursosEstudiante', (req,res) => {
+    const sql = "SELECT Curso.ID_Curso, Curso.nombre FROM Curso INNER JOIN EstudiantePorCurso ON Curso.ID_Curso = EstudiantePorCurso.ID_Curso INNER JOIN Estudiante ON EstudiantePorCurso.cedulaEstudiante = Estudiante.cedula where Estudiante.cedula = ?"
+    db.query(sql, [req.query.cedula], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    })
+});
+
 //Tareas
 app.post("/crearTarea", (req,res) =>{
     var descripcion = req.query.descripcion;
