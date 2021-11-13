@@ -60,6 +60,28 @@ app.get('/obtenerUsuario', (req,res) => {
     })
 });
 
+app.get('/obtenerCedula', (req,res) => {
+    const sql = "SELECT Docente.cedula FROM Docente INNER JOIN Usuario ON Docente.email = Usuario.email WHERE Docente.email = ?"
+    db.query(sql, [req.query.email], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            if(result.length > 0){
+                res.send(result[0]);
+            } else {
+                sql = 'SELECT Estudiante.cedula FROM Estudiante INNER JOIN Usuario ON Estudiante.email = Usuario.email WHERE Estudiante.email = ?'
+                db.query(sql, [req.query.email], (err, resulta) => {
+                    if(err){
+                        res.send(err);
+                    } else {
+                        res.send(resulta[0]);
+                    }
+                })
+            }
+        }
+    })
+});
+
 //Docente
 app.post("/crearDocente", (req,res) =>{
     const email = req.body.email 
