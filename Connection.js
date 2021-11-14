@@ -120,7 +120,7 @@ app.post("/borrarDocente", (req,res) =>{
         if(err){
             res.send(err);
         } else {
-            email = result[0];
+            email = result;
 
             sql = "delete from Docente where cedula = ?";
             db.query(sql , [cedula] ,(err, _) => {
@@ -133,7 +133,7 @@ app.post("/borrarDocente", (req,res) =>{
                     if(err){
                         res.send(err);
                     }
-
+                    console.log(email);
                     sql = "delete from Usuario where email = ?";
                     db.query(sql , [email] ,(err, _) => {
                         console.log(err);
