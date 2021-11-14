@@ -163,7 +163,7 @@ app.get('/obtenerDocentes', (_,res) => {
     })
 });
 
-app.put("/calificarDocente", (req,res) =>{
+app.post("/calificarDocente", (req,res) =>{
     var resultados;
     var sql = "select * from Calificacion where cedula_docente = ? and cedula_estudiante = ?";
     db.query(sql , [req.body.cedulaDocente, req.body.cedulaEstudiante] ,(err, result) => {
@@ -510,7 +510,7 @@ app.post("/asignarEstudiante", (req,res) =>{
     })
 });
 
-app.put("/retirarEstudiante", (req,res) =>{
+app.post("/retirarEstudiante", (req,res) =>{
     const sql = "delete from EstudiantePorCurso where cedulaEstudiante = ? AND ID_Curso = ?";
     db.query(sql , [req.body.cedulaEstudiante, req.body.idCurso] ,(err, _) => {
         console.log(err);
@@ -527,7 +527,7 @@ app.post("/crearNoticia", (req,res) =>{
 });
 
 app.post("/borrarNoticia", (req,res) =>{
-    var sql = "delete from Noticia where ID_Noticia = ?";
+    var sql = "delete from Noticia where id = ?";
     db.query(sql , [req.body.idNoticia] ,(err, _) => {
         console.log(err);
         res.send(err);
@@ -535,7 +535,7 @@ app.post("/borrarNoticia", (req,res) =>{
 });
 
 app.get('/obtenerNoticia', (req,res) => {
-    const sql = "select * from Noticia where ID_Noticia = ?"
+    const sql = "select * from Noticia where id = ?"
     db.query(sql, [req.query.idNoticia], (err, result) => {
         if(err){
             res.send(err);
@@ -557,18 +557,30 @@ app.get('/obtenerNoticias', (req,res) => {
 });
 
 app.put('/actualizarNoticia', (req,res) => {
-    const sql = "update Noticia set mensaje = ? where ID_Noticia = ?"
-    db.query(sql, [req.body.mensaje, req.body.ID_Curso], (err, _) => {
+    const sql = "update Noticia set mensaje = ? where id = ?"
+    db.query(sql, [req.body.mensaje, req.body.idNoticia], (err, _) => {
+        res.send(err);
+    })
+});
+
+//Mensaje
+app.post("/crearMensaje", (req,res) =>{
+    var contenido = req.body.contenido;
+    var fechaEnvio = req.body.fechaEnvio;
+    var idCurso = req.body.idCurso;
+    var emisor = req.body.emisor;
+    var sql = "insert into Mensaje (contenido, fechaEnvio, ID_Curso, emisor) values (?, ?, ?, ?)";
+    db.query(sql , [contenido, fechaEnvio, idCurso, emisor] ,(err, _) => {
         res.send(err);
     })
 });
 
 //Tareas
 app.post("/crearTarea", (req,res) =>{
-    var descripcion = req.query.descripcion;
-    var fechaEntrega = req.query.fechaEntrega;
-    var idCurso = req.query.idCurso;
-    var titulo = req.query.titulo;
+    var descripcion = req.body.descripcion;
+    var fechaEntrega = req.body.fechaEntrega;
+    var idCurso = req.body.idCurso;
+    var titulo = req.body.titulo;
     var sql = "insert into Tarea (descripcion, fechaEntrega, ID_Curso, titulo) values (?, ?, ?, ?)";
     db.query(sql , [descripcion, fechaEntrega, idCurso, titulo] ,(err, _) => {
         res.send(err);
