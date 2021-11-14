@@ -95,18 +95,18 @@ app.post("/crearDocente", (req,res) =>{
         if(err){
             res.send(err);
         }
-    })
 
-    sql = "INSERT INTO Persona (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
-    db.query(sql , [cedula, nombre, primerApellido, segundoApellido, email] ,(err, _) => {
-        if(err){
-            res.send(err);
-        }
-
-        sql = "INSERT INTO Docente (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
+        sql = "INSERT INTO Persona (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
         db.query(sql , [cedula, nombre, primerApellido, segundoApellido, email] ,(err, _) => {
-            console.log(err);
-            res.send(err);
+            if(err){
+                res.send(err);
+            }
+
+            sql = "INSERT INTO Docente (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
+            db.query(sql , [cedula, nombre, primerApellido, segundoApellido, email] ,(err, _) => {
+                console.log(err);
+                res.send(err);
+            })
         })
     })
 });
@@ -127,19 +127,19 @@ app.post("/borrarDocente", (req,res) =>{
                 if(err){
                     res.send(err);
                 }
-            })
 
-            sql = "delete from Persona where cedula = ?";
-            db.query(sql , [cedula] ,(err, _) => {
-                if(err){
-                    res.send(err);
-                }
-            })
+                sql = "delete from Persona where cedula = ?";
+                db.query(sql , [cedula] ,(err, _) => {
+                    if(err){
+                        res.send(err);
+                    }
 
-            sql = "delete from Usuario where email = ?";
-            db.query(sql , [email] ,(err, _) => {
-                console.log(err);
-                res.send(err);
+                    sql = "delete from Usuario where email = ?";
+                    db.query(sql , [email] ,(err, _) => {
+                        console.log(err);
+                        res.send(err);
+                    })
+                })
             })
         }
     })
