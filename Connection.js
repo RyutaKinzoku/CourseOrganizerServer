@@ -521,7 +521,7 @@ app.put("/retirarEstudiante", (req,res) =>{
 //Noticias
 app.post("/crearNoticia", (req,res) =>{
     var sql = "insert into Noticia (mensaje, ID_Curso) values (?, ?)";
-    db.query(sql , [req.query.mensaje, req.query.ID_Curso] ,(err, _) => {
+    db.query(sql , [req.body.mensaje, req.body.ID_Curso] ,(err, _) => {
         res.send(err);
     })
 });
@@ -545,9 +545,9 @@ app.get('/obtenerNoticia', (req,res) => {
     })
 });
 
-app.get('/obtenerNoticia', (req,res) => {
+app.get('/obtenerNoticias', (req,res) => {
     const sql = "select * from Noticia where ID_Curso = ?"
-    db.query(sql, [idCurso], (err, result) => {
+    db.query(sql, [req.query.idCurso], (err, result) => {
         if(err){
             res.send(err);
         } else {
@@ -558,7 +558,7 @@ app.get('/obtenerNoticia', (req,res) => {
 
 app.put('/actualizarNoticia', (req,res) => {
     const sql = "update Noticia set mensaje = ? where ID_Noticia = ?"
-    db.query(sql, [req.query.mensaje, req.query.ID_Curso], (err, _) => {
+    db.query(sql, [req.body.mensaje, req.body.ID_Curso], (err, _) => {
         res.send(err);
     })
 });
