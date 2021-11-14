@@ -369,26 +369,15 @@ app.get('/obtenerCurso', (req,res) => {
     })
 });
 
-app.get('/obtenerCursos', (req,res) => {
-    var cursos = [];
+app.get('/obtenerCursos', (_,res) => {
     var sql = "select * from Curso"
     db.query(sql, (err, result) => {
         if(err){
             res.send(err);
         } else {
-            sql = "select * from CursoPorDia where ID_Curso = ?"
-            for(var curso of result){
-                db.query(sql, [curso[0]], (err, resulta) => {
-                    if(err){
-                        res.send(err);
-                    } else {
-                        cursos.push([curso, resulta]);
-                    }
-                })
-            }
+            res.send(result);
         }
     })
-    res.send(cursos);
 });
 
 app.put('/actualizarCurso', (req,res) => {
