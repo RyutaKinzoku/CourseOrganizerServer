@@ -575,6 +575,17 @@ app.post("/crearMensaje", (req,res) =>{
     })
 });
 
+app.get('/obtenerMensajes', (req,res) => {
+    const sql = "select * from Mensaje where ID_Curso = ?"
+    db.query(sql, [req.query.idCurso], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    })
+});
+
 //Tareas
 app.post("/crearTarea", (req,res) =>{
     var descripcion = req.body.descripcion;
@@ -588,7 +599,7 @@ app.post("/crearTarea", (req,res) =>{
 });
 
 app.post("/borrarTarea", (req,res) =>{
-    var sql = "delete from Tarea where ID_Tarea = ?";
+    var sql = "delete from Tarea where id = ?";
     db.query(sql , [req.body.idTarea] ,(err, _) => {
         console.log(err);
         res.send(err);
@@ -596,7 +607,7 @@ app.post("/borrarTarea", (req,res) =>{
 });
 
 app.get('/obtenerTarea', (req,res) => {
-    const sql = "select * from Tarea where ID_Tarea = ?"
+    const sql = "select * from Tarea where id = ?"
     db.query(sql, [req.query.idTarea], (err, result) => {
         if(err){
             res.send(err);
@@ -622,7 +633,7 @@ app.put('/actualizarTarea', (req,res) => {
     const descripcion = req.body.descripcion; 
     const fechaEntrega = req.body.fechaEntrega; 
     const titulo = req.body.titulo; 
-    const sql = "update Tarea set descripcion = ?, fechaEntrega = ?, titulo = ? where ID_Tarea = ?"
+    const sql = "update Tarea set descripcion = ?, fechaEntrega = ?, titulo = ? where id = ?"
     db.query(sql, [descripcion, fechaEntrega, titulo, idTarea], (err, _) => {
         res.send(err);
     })
