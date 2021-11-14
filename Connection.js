@@ -334,19 +334,20 @@ app.post("/borrarCurso", (req,res) =>{
 
     sql = "delete from CursoPorDia where ID_Curso = ?";
     db.query(sql , [idCurso] ,(err, _) => {
-        console.log(err);
-        res.send(err);
+        if(err){
+            res.send(err);
+        }
     })
 
     sql = "delete from EstudiantePorCurso where ID_Curso = ?";
     db.query(sql , [idCurso] ,(err, _) => {
-        console.log(err);
-        res.send(err);
+        if(err){
+            res.send(err);
+        }
     })
 
     sql = "delete from Curso where ID_Curso = ?";
     db.query(sql , [idCurso] ,(err, _) => {
-        console.log(err);
         res.send(err);
     })
 });
@@ -374,9 +375,8 @@ app.get('/obtenerCursos', (_,res) => {
     db.query(sql, (err, result) => {
         if(err){
             res.send(err);
-        } else {
-            res.send(result);
         }
+        res.send(result);
     })
 });
 
