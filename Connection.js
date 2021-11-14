@@ -102,12 +102,12 @@ app.post("/crearDocente", (req,res) =>{
         if(err){
             res.send(err);
         }
-    })
 
-    sql = "INSERT INTO Docente (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
-    db.query(sql , [cedula, nombre, primerApellido, segundoApellido, email] ,(err, _) => {
-        console.log(err);
-        res.send(err);
+        sql = "INSERT INTO Docente (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
+        db.query(sql , [cedula, nombre, primerApellido, segundoApellido, email] ,(err, _) => {
+            console.log(err);
+            res.send(err);
+        })
     })
 });
 
