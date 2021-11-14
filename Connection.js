@@ -304,17 +304,7 @@ app.put('/actualizarEstudiante', (req,res) => {
 app.post("/crearCurso", (req,res) =>{
     var idCurso;
     var sql = "insert into Curso (nombre, gradoEscolar) values (?, ?); SELECT LAST_INSERT_ID()";
-    db.query(sql , [req.query.nombre, req.query.grado] ,(err, result) => {
-        idCurso = result;
-        sql = "insert into CursoPorDia (ID_Curso, dia, horaInicio, horaFin) values (?, ?, ?, ?)";
-        for(const t of req.query.horario){
-            var partes = t.split(" ");
-            db.query(sql , [idCurso, partes[1], partes[2], partes[3]] ,(err, _) => {
-                if(err){
-                    res.send(err);
-                }
-            })
-        }
+    db.query(sql , [req.query.nombre, req.query.grado] ,(err, _) => {
         res.send(err);
     })
 });
