@@ -638,3 +638,59 @@ app.put('/actualizarTarea', (req,res) => {
         res.send(err);
     })
 });
+
+//Metodos curso
+app.get('/obtenerNombreDocenteDelCurso', (req,res) => {
+    const sql = "select Docente.nombre, Docente.primerApellido, Docente.segundoApellido FROM Curso INNER JOIN Docente ON Curso.cedulaDocente = Docente.cedula WHERE Curso.id = ?"
+    db.query(sql, [req.query.idCurso], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result[0]);
+        }
+    })
+});
+
+app.get('/obtenerEstudiantesDelCurso', (req,res) => {
+    const sql = "SELECT Estudiante.nombre, Estudiante.primerApellido, Estudiante.segundoApellido FROM Curso INNER JOIN EstudiantePorCurso ON Curso.id = EstudiantePorCurso.ID_Curso INNER JOIN Estudiante ON EstudiantePorCurso.cedulaEstudiante = Estudiante.cedula WHERE Curso.id = ?"
+    db.query(sql, [req.query.idCurso], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    })
+});
+
+app.get('/obtenerCursosProfesor', (req,res) => {
+    const sql = "SELECT Curso.id, Curso.nombre, Curso.gradoEscolar, Curso.cedulaDocente FROM Curso INNER JOIN Docente ON Curso.cedulaDocente = Docente.cedula WHERE Docente.email = ?"
+    db.query(sql, [req.query.email], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    })
+});
+
+app.get('/obtenerCursosEstudiante', (req,res) => {
+    const sql = "SELECT Curso.id, Curso.nombre, Curso.gradoEscolar, Curso.cedulaDocente FROM Curso INNER JOIN EstudiantePorCurso ON Curso.id = EstudiantePorCurso.ID_Curso INNER JOIN Estudiante ON EstudiantePorCurso.cedulaEstudiante = Estudiante.cedula where Estudiante.email = ?"
+    db.query(sql, [req.query.email], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    })
+});
+
+app.get('/obtenerNombreDocenteDelCurso', (req,res) => {
+    const sql = "select d.cedula, d.nombre, d.primerApellido, d.segundoApellido, AVG(ca.valor), d.email FROM Curso cu INNER JOIN Docente d ON cu.cedulaDocente = d.cedula INNER JOIN Calificacion ca ON d.cedula = ca.cedula_docente WHERE cu.id = ? GROUP BY d.cedula";
+    db.query(sql, [req.query.idCurso], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result[0]);
+        }
+    })
+});
