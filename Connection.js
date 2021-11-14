@@ -112,33 +112,34 @@ app.post("/crearDocente", (req,res) =>{
 app.post("/borrarDocente", (req,res) =>{
     const cedula = req.body.cedula 
     var email;
-    var sql = "delete from Docente where cedula = ?";
-    db.query(sql , [cedula] ,(err, _) => {
-        if(err){
-            res.send(err);
-        }
-    })
 
-    sql = "select email from Persona where cedula = ?";
+    var sql = "select email from Persona where cedula = ?";
     db.query(sql , [cedula] ,(err, result) => {
         if(err){
             res.send(err);
         } else {
             email = result[0];
-        }
-    })
+            
+            sql = "delete from Docente where cedula = ?";
+            db.query(sql , [cedula] ,(err, _) => {
+                if(err){
+                    res.send(err);
+                }
+            })
 
-    sql = "delete from Persona where cedula = ?";
-    db.query(sql , [cedula] ,(err, _) => {
-        if(err){
-            res.send(err);
-        }
-    })
+            sql = "delete from Persona where cedula = ?";
+            db.query(sql , [cedula] ,(err, _) => {
+                if(err){
+                    res.send(err);
+                }
+            })
 
-    sql = "delete from Usuario where email = ?";
-    db.query(sql , [email] ,(err, _) => {
-        console.log(err);
-        res.send(err);
+            sql = "delete from Usuario where email = ?";
+            db.query(sql , [email] ,(err, _) => {
+                console.log(err);
+                res.send(err);
+            })
+        }
     })
 });
 
