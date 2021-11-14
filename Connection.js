@@ -141,22 +141,6 @@ app.post("/borrarDocente", (req,res) =>{
     })
 });
 
-app.put("/asignarDocente", (req,res) =>{
-    const sql = "update Curso set cedulaDocente = ? where ID_Curso = ?";
-    db.query(sql , [req.body.cedula, req.body.idCurso] ,(err, _) => {
-        console.log(err);
-        res.send(err);
-    })
-});
-
-app.put("/retirarDocente", (req,res) =>{
-    const sql = "update Curso set cedulaDocente = Null where ID_Curso = ? AND cedulaDocente = ?";
-    db.query(sql , [req.body.idCurso, req.body.cedula] ,(err, _) => {
-        console.log(err);
-        res.send(err);
-    })
-});
-
 app.get('/obtenerDocente', (req,res) => {
     const sql = "SELECT d.cedula, d.nombre, d.primerApellido, d.segundoApellido, AVG(c.valor), d.email FROM Docente d INNER JOIN Calificacion c ON c.cedula_docente = d.cedula WHERE d.cedula = ?"
     db.query(sql, [req.query.cedula], (err, result) => {
@@ -168,7 +152,7 @@ app.get('/obtenerDocente', (req,res) => {
     })
 });
 
-app.get('/obtenerDocentes', (req,res) => {
+app.get('/obtenerDocentes', (_,res) => {
     const sql = "select * from Docente"
     db.query(sql, (err, result) => {
         if(err){
@@ -273,22 +257,6 @@ app.post("/borrarEstudiante", (req,res) =>{
 
     sql = "delete from Usuario where email = ?";
     db.query(sql , [email] ,(err, _) => {
-        console.log(err);
-        res.send(err);
-    })
-});
-
-app.post("/asignarEstudiante", (req,res) =>{
-    const sql = "insert into EstudiantePorCurso (ID_Curso, cedulaEstudiante) values (?, ?)";
-    db.query(sql , [req.body.idCurso, req.body.cedulaEstudiante] ,(err, _) => {
-        console.log(err);
-        res.send(err);
-    })
-});
-
-app.put("/retirarEstudiante", (req,res) =>{
-    const sql = "delete from EstudiantePorCurso where cedulaEstudiante = ? AND ID_Curso = ?";
-    db.query(sql , [req.body.cedulaEstudiante, req.body.idCurso] ,(err, _) => {
         console.log(err);
         res.send(err);
     })
@@ -515,6 +483,83 @@ app.get('/obtenerCursosEstudiante', (req,res) => {
         } else {
             res.send(result);
         }
+    })
+});
+
+app.put("/asignarDocente", (req,res) =>{
+    const sql = "update Curso set cedulaDocente = ? where ID_Curso = ?";
+    db.query(sql , [req.body.cedula, req.body.idCurso] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+});
+
+app.put("/retirarDocente", (req,res) =>{
+    const sql = "update Curso set cedulaDocente = Null where ID_Curso = ? AND cedulaDocente = ?";
+    db.query(sql , [req.body.idCurso, req.body.cedula] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+});
+
+app.post("/asignarEstudiante", (req,res) =>{
+    const sql = "insert into EstudiantePorCurso (ID_Curso, cedulaEstudiante) values (?, ?)";
+    db.query(sql , [req.body.idCurso, req.body.cedulaEstudiante] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+});
+
+app.put("/retirarEstudiante", (req,res) =>{
+    const sql = "delete from EstudiantePorCurso where cedulaEstudiante = ? AND ID_Curso = ?";
+    db.query(sql , [req.body.cedulaEstudiante, req.body.idCurso] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+});
+
+//Noticias
+app.post("/crearNoticia", (req,res) =>{
+    var sql = "insert into Noticia (mensaje, ID_Curso) values (?, ?)";
+    db.query(sql , [req.query.mensaje, req.query.ID_Curso] ,(err, _) => {
+        res.send(err);
+    })
+});
+
+app.post("/borrarNoticia", (req,res) =>{
+    var sql = "delete from Noticia where ID_Noticia = ?";
+    db.query(sql , [req.body.idNoticia] ,(err, _) => {
+        console.log(err);
+        res.send(err);
+    })
+});
+
+app.get('/obtenerNoticia', (req,res) => {
+    const sql = "select * from Noticia where ID_Noticia = ?"
+    db.query(sql, [req.query.idNoticia], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result[0]);
+        }
+    })
+});
+
+app.get('/obtenerNoticia', (req,res) => {
+    const sql = "select * from Noticia where ID_Curso = ?"
+    db.query(sql, [idCurso], (err, result) => {
+        if(err){
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    })
+});
+
+app.put('/actualizarNoticia', (req,res) => {
+    const sql = "update Noticia set mensaje = ? where ID_Noticia = ?"
+    db.query(sql, [req.query.mensaje, req.query.ID_Curso], (err, _) => {
+        res.send(err);
     })
 });
 
