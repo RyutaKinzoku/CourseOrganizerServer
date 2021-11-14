@@ -9,10 +9,9 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 
-const port = process.env.PORT || 3000
-
-app.listen(port, () =>
-    console.log(`running on port ${port}`));
+app.listen(process.env.PORT || 3000, function(){
+    console.log(`running on port`, this.address().port, app.settings.env)
+});
 
 const db = mysql.createPool({
     host : "remotemysql.com",
@@ -61,7 +60,7 @@ app.get('/obtenerUsuario', (req,res) => {
 });
 
 app.get('/obtenerCedula', (req,res) => {
-    const sql = "SELECT Docente.cedula FROM Docente INNER JOIN Usuario ON Docente.email = Usuario.email WHERE Docente.email = ?"
+    var sql = "SELECT Docente.cedula FROM Docente INNER JOIN Usuario ON Docente.email = Usuario.email WHERE Docente.email = ?"
     db.query(sql, [req.query.email], (err, result) => {
         if(err){
             res.send(err);
@@ -192,7 +191,7 @@ app.put('/actualizarDocente', (req,res) => {
     const segundoApellido = req.body.segundoApellido; 
     const email = req.body.email; 
     const cedula = req.body.cedula;
-    const sql = "update Docente set nombre = ?, primerApellido = ?, segundoApellido = ?, email = ? where cedula = ?;"
+    var sql = "update Docente set nombre = ?, primerApellido = ?, segundoApellido = ?, email = ? where cedula = ?;"
     db.query(sql, [nombre, primerApellido, segundoApellido, email, cedula], (err, _) => {
         res.send(err);
     })
@@ -291,7 +290,7 @@ app.put('/actualizarEstudiante', (req,res) => {
     const segundoApellido = req.body.segundoApellido; 
     const grado = req.body.grado; 
     const email = req.body.email; 
-    const sql = "update Estudiante set nombre = ?, primerApellido = ?, segundoApellido = ?, gradoEscolar = ?, email = ? where cedula = ?;"
+    var sql = "update Estudiante set nombre = ?, primerApellido = ?, segundoApellido = ?, gradoEscolar = ?, email = ? where cedula = ?;"
     db.query(sql, [nombre, primerApellido, segundoApellido, email, grado, cedula], (err, _) => {
         res.send(err);
     })
@@ -369,7 +368,7 @@ app.post("/borrarCurso", (req,res) =>{
 });
 
 app.get('/obtenerCurso', (req,res) => {
-    const sql = "select * from Curso where ID_Curso = ?"
+    var sql = "select * from Curso where ID_Curso = ?"
     db.query(sql, [req.query.idCurso], (err, result) => {
         if(err){
             res.send(err);
@@ -388,7 +387,7 @@ app.get('/obtenerCurso', (req,res) => {
 
 app.get('/obtenerCursos', (req,res) => {
     var cursos = [];
-    const sql = "select * from Curso"
+    var sql = "select * from Curso"
     db.query(sql, (err, result) => {
         if(err){
             res.send(err);
@@ -413,7 +412,7 @@ app.put('/actualizarCurso', (req,res) => {
     const nombre = req.body.nombre; 
     const grado = req.body.grado; 
     const horario = req.body.horario; 
-    const sql = "update Curso set nombre = ?, gradoEscolar = ? where ID_Curso = ?"
+    var sql = "update Curso set nombre = ?, gradoEscolar = ? where ID_Curso = ?"
     db.query(sql, [nombre, grado, idCurso], (err, _) => {
         if(err){
             res.send(err);
