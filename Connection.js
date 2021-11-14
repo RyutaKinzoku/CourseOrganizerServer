@@ -92,14 +92,16 @@ app.post("/crearDocente", (req,res) =>{
 
     var sql = "INSERT INTO Usuario (email, contrasena, rol) VALUES (?,?,?);";
     db.query(sql , [email, contrasena, "Docente"] ,(err, _) => {
-        console.log(err);
-        res.send(err);
+        if(err){
+            res.send(err);
+        }
     })
 
     sql = "INSERT INTO Persona (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
     db.query(sql , [cedula, nombre, primerApellido, segundoApellido, email] ,(err, _) => {
-        console.log(err);
-        res.send(err);
+        if(err){
+            res.send(err);
+        }
     })
 
     sql = "INSERT INTO Docente (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
@@ -119,7 +121,7 @@ app.post("/borrarDocente", (req,res) =>{
             res.send(err);
         } else {
             email = result[0];
-            
+
             sql = "delete from Docente where cedula = ?";
             db.query(sql , [cedula] ,(err, _) => {
                 if(err){
