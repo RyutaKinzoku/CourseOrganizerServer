@@ -302,8 +302,7 @@ app.put('/actualizarEstudiante', (req,res) => {
 
 //Cursos
 app.post("/crearCurso", (req,res) =>{
-    var idCurso;
-    var sql = "insert into Curso (nombre, gradoEscolar) values (?, ?); SELECT LAST_INSERT_ID()";
+    var sql = "insert into Curso (nombre, gradoEscolar) values (?, ?);";
     db.query(sql , [req.query.nombre, req.query.grado] ,(err, _) => {
         res.send(err);
     })
