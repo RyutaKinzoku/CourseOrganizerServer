@@ -421,7 +421,7 @@ app.get('/obtenerNombreDocenteDelCurso', (req,res) => {
 });
 
 app.get('/obtenerDocenteDelCurso', (req,res) => {
-    const sql = "select d.cedula, d.nombre, d.primerApellido, d.segundoApellido, AVG(ca.valor), d.email FROM Curso cu INNER JOIN Docente d ON cu.cedulaDocente = d.cedula INNER JOIN Calificacion ca ON d.cedula = ca.cedula_docente WHERE cu.ID_Curso = ? GROUP BY d.cedula"
+    const sql = "select d.cedula, d.nombre, d.primerApellido, d.segundoApellido, AVG(ca.valor), d.email FROM Curso cu INNER JOIN Docente d ON cu.cedulaDocente = d.cedula INNER JOIN Calificacion ca ON d.cedula = ca.cedula_docente WHERE cu.id = ? GROUP BY d.cedula"
     db.query(sql, [req.query.idCurso], (err, result) => {
         if(err){
             res.send(err);
@@ -652,7 +652,6 @@ app.get('/obtenerCursosProfesor', (req,res) => {
 });
 
 app.get('/obtenerCursosEstudiante', (req,res) => {
-    console.log(req.query.email)
     const sql = "SELECT Curso.id, Curso.nombre, Curso.gradoEscolar, Curso.cedulaDocente FROM Curso INNER JOIN EstudiantePorCurso ON Curso.id = EstudiantePorCurso.ID_Curso INNER JOIN Estudiante ON EstudiantePorCurso.cedulaEstudiante = Estudiante.cedula where Estudiante.email = ?"
     db.query(sql, [req.query.email], (err, result) => {
         if(err){
