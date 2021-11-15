@@ -147,7 +147,7 @@ app.post("/borrarDocente", (req,res) =>{
 });
 
 app.get('/obtenerDocente', (req,res) => {
-    const sql = "SELECT d.cedula, d.nombre, d.primerApellido, d.segundoApellido, d.email FROM Docente d WHERE d.cedula = ?"
+    var sql = "SELECT d.cedula, d.nombre, d.primerApellido, d.segundoApellido, d.email FROM Docente d WHERE d.cedula = ?"
     db.query(sql, [req.query.cedula], (err, result) => {
         if(err){
             res.send(err);
