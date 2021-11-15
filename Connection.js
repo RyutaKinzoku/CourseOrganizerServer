@@ -220,52 +220,53 @@ app.post("/crearEstudiante", (req,res) =>{
         if(err){
             res.send(err);
         }
-    })
 
-    sql = "INSERT INTO Persona (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
-    db.query(sql , [cedula, nombre, primerApellido, segundoApellido, email] ,(err, _) => {
-        if(err){
-            res.send(err);
-        }
-    })
+        sql = "INSERT INTO Persona (cedula, nombre, primerApellido, segundoApellido, email) VALUES (?,?,?,?,?);";
+        db.query(sql , [cedula, nombre, primerApellido, segundoApellido, email] ,(err, _) => {
+            if(err){
+                res.send(err);
+            }
 
-    sql = "INSERT INTO Estudiante (cedula, nombre, primerApellido, segundoApellido, gradoEscolar, email) VALUES (?,?,?,?,?,?);";
-    db.query(sql , [cedula, nombre, primerApellido, segundoApellido, grado, email] ,(err, _) => {
-        console.log(err);
-        res.send(err);
+            sql = "INSERT INTO Estudiante (cedula, nombre, primerApellido, segundoApellido, gradoEscolar, email) VALUES (?,?,?,?,?,?);";
+            db.query(sql , [cedula, nombre, primerApellido, segundoApellido, grado, email] ,(err, _) => {
+                console.log(err);
+                res.send(err);
+            })
+        })
     })
 });
 
 app.post("/borrarEstudiante", (req,res) =>{
     const cedula = req.body.cedula 
     var email;
-    var sql = "delete from Estudiante where cedula = ?";
-    db.query(sql , [cedula] ,(err, _) => {
-        if(err){
-            res.send(err);
-        }
-    })
 
-    sql = "select email from Persona where cedula = ?";
+    var sql = "select email from Persona where cedula = ?";
     db.query(sql , [cedula] ,(err, result) => {
         if(err){
             res.send(err);
         } else {
-            email = result[0];
-        }
-    })
+            email = result[0].email;
 
-    sql = "delete from Persona where cedula = ?";
-    db.query(sql , [cedula] ,(err, _) => {
-        if(err){
-            res.send(err);
-        }
-    })
+            sql = "delete from Estudiante where cedula = ?";
+            db.query(sql , [cedula] ,(err, _) => {
+                if(err){
+                    res.send(err);
+                }
 
-    sql = "delete from Usuario where email = ?";
-    db.query(sql , [email] ,(err, _) => {
-        console.log(err);
-        res.send(err);
+                sql = "delete from Persona where cedula = ?";
+                db.query(sql , [cedula] ,(err, _) => {
+                    if(err){
+                        res.send(err);
+                    }
+
+                    sql = "delete from Usuario where email = ?";
+                    db.query(sql , [email] ,(err, _) => {
+                        console.log(err);
+                        res.send(err);
+                    })
+                })
+            })
+        }
     })
 });
 
