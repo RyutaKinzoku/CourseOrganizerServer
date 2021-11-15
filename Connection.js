@@ -360,7 +360,7 @@ app.post("/borrarCurso", (req,res) =>{
                             res.send(err);
                         }
 
-                        sql = "delete from Curso where ID_Curso = ?";
+                        sql = "delete from Curso where id = ?";
                         db.query(sql , [idCurso] ,(err, _) => {
                             res.send(err);
                         })
