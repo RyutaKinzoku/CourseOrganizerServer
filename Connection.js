@@ -121,7 +121,7 @@ app.post("/borrarDocente", (req,res) =>{
         if(err){
             res.send(err);
         } else {
-            email = result.email;
+            email = result[0].email;
 
             sql = "delete from Docente where cedula = ?";
             db.query(sql , [cedula] ,(err, _) => {
