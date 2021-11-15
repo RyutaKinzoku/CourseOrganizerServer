@@ -403,22 +403,9 @@ app.put('/actualizarCurso', (req,res) => {
     const idCurso = req.body.idCurso;
     const nombre = req.body.nombre; 
     const grado = req.body.grado; 
-    const horario = req.body.horario; 
-    var sql = "update Curso set nombre = ?, gradoEscolar = ? where ID_Curso = ?"
+    var sql = "update Curso set nombre = ?, gradoEscolar = ? where id = ?"
     db.query(sql, [nombre, grado, idCurso], (err, _) => {
-        if(err){
-            res.send(err);
-        } else {
-            sql = 'update CursoPorDia set dia = ?, horaInicio = ?, horaFin = ? where idCurso = ? and dia = "Martes"'
-            for(const t of req.query.horario){
-                var partes = t.split(" ");
-                db.query(sql , [idCurso, partes[0], partes[1], partes[2]] ,(err, _) => {
-                    if(err){
-                        res.send(err);
-                    }
-                })
-            }
-        }
+        res.send(err);
     })
 });
 
