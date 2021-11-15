@@ -203,9 +203,8 @@ app.put('/actualizarDocente', (req,res) => {
     const nombre = req.body.nombre; 
     const primerApellido = req.body.primerApellido; 
     const segundoApellido = req.body.segundoApellido; 
-    const email = req.body.email; 
     const cedula = req.body.cedula;
-    var sql = "update Docente set nombre = ?, primerApellido = ?, segundoApellido = ?, email = ? where cedula = ?;"
+    var sql = "update Docente set nombre = ?, primerApellido = ?, segundoApellido = ? where cedula = ?;"
     db.query(sql, [nombre, primerApellido, segundoApellido, email, cedula], (err, _) => {
         res.send(err);
     })
@@ -308,8 +307,7 @@ app.put('/actualizarEstudiante', (req,res) => {
     const primerApellido = req.body.primerApellido; 
     const segundoApellido = req.body.segundoApellido; 
     const grado = req.body.grado; 
-    const email = req.body.email; 
-    var sql = "update Estudiante set nombre = ?, primerApellido = ?, segundoApellido = ?, gradoEscolar = ?, email = ? where cedula = ?;"
+    var sql = "update Estudiante set nombre = ?, primerApellido = ?, segundoApellido = ?, gradoEscolar = ? where cedula = ?;"
     db.query(sql, [nombre, primerApellido, segundoApellido, email, grado, cedula], (err, _) => {
         if(err){
             res.send(err);
