@@ -499,7 +499,7 @@ app.post("/retirarEstudiante", (req,res) =>{
 //Noticias
 app.post("/crearNoticia", (req,res) =>{
     var sql = "insert into Noticia (mensaje, ID_Curso) values (?, ?)";
-    db.query(sql , [req.body.mensaje, req.body.ID_Curso] ,(err, _) => {
+    db.query(sql , [req.body.mensaje, req.body.idCurso] ,(err, _) => {
         res.send(err);
     })
 });
