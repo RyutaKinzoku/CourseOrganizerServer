@@ -425,7 +425,7 @@ app.put('/actualizarCurso', (req,res) => {
 });
 
 app.get('/obtenerNombreDocenteDelCurso', (req,res) => {
-    const sql = "select Docente.cedula, Docente.nombre, Docente.primerApellido, Docente.segundoApellido FROM Curso INNER JOIN Docente ON Curso.cedulaDocente = Docente.cedula WHERE Curso.ID_Curso = ?"
+    const sql = "select Docente.cedula, Docente.nombre, Docente.primerApellido, Docente.segundoApellido FROM Curso INNER JOIN Docente ON Curso.cedulaDocente = Docente.cedula WHERE Curso.id = ?"
     db.query(sql, [req.query.idCurso], (err, result) => {
         if(err){
             res.send(err);
@@ -447,7 +447,7 @@ app.get('/obtenerDocenteDelCurso', (req,res) => {
 });
 
 app.get('/obtenerEstudiantesDelCurso', (req,res) => {
-    const sql = "SELECT Estudiante.cedula, Estudiante.nombre, Estudiante.primerApellido, Estudiante.segundoApellido FROM Curso INNER JOIN EstudiantePorCurso ON Curso.ID_Curso = EstudiantePorCurso.ID_Curso INNER JOIN Estudiante ON EstudiantePorCurso.cedulaEstudiante = Estudiante.cedula WHERE Curso.ID_Curso = ?"
+    const sql = "SELECT Estudiante.cedula, Estudiante.nombre, Estudiante.primerApellido, Estudiante.segundoApellido FROM Curso INNER JOIN EstudiantePorCurso ON Curso.id = EstudiantePorCurso.ID_Curso INNER JOIN Estudiante ON EstudiantePorCurso.cedulaEstudiante = Estudiante.cedula WHERE Curso.id = ?"
     db.query(sql, [req.query.idCurso], (err, result) => {
         if(err){
             res.send(err);
@@ -458,7 +458,7 @@ app.get('/obtenerEstudiantesDelCurso', (req,res) => {
 });
 
 app.get('/obtenerCursosProfesor', (req,res) => {
-    const sql = "SELECT Curso.ID_Curso, Curso.nombre FROM Curso INNER JOIN Docente ON Curso.cedulaDocente = Docente.cedula WHERE Curso.cedulaDocente = ?"
+    const sql = "SELECT Curso.id, Curso.nombre FROM Curso INNER JOIN Docente ON Curso.cedulaDocente = Docente.cedula WHERE Curso.cedulaDocente = ?"
     db.query(sql, [req.query.cedula], (err, result) => {
         if(err){
             res.send(err);
@@ -469,7 +469,7 @@ app.get('/obtenerCursosProfesor', (req,res) => {
 });
 
 app.get('/obtenerCursosEstudiante', (req,res) => {
-    const sql = "SELECT Curso.ID_Curso, Curso.nombre FROM Curso INNER JOIN EstudiantePorCurso ON Curso.ID_Curso = EstudiantePorCurso.ID_Curso INNER JOIN Estudiante ON EstudiantePorCurso.cedulaEstudiante = Estudiante.cedula where Estudiante.cedula = ?"
+    const sql = "SELECT Curso.id, Curso.nombre FROM Curso INNER JOIN EstudiantePorCurso ON Curso.id = EstudiantePorCurso.ID_Curso INNER JOIN Estudiante ON EstudiantePorCurso.cedulaEstudiante = Estudiante.cedula where Estudiante.cedula = ?"
     db.query(sql, [req.query.cedula], (err, result) => {
         if(err){
             res.send(err);
