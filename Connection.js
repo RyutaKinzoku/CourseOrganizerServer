@@ -133,7 +133,7 @@ app.post("/borrarDocente", (req,res) =>{
                     if(err){
                         res.send(err);
                     }
-                    console.log(email);
+                    console.log("CORRRREOOOOO: "+email);
                     sql = "delete from Usuario where email = ?";
                     db.query(sql , [email] ,(err, _) => {
                         console.log(err);
