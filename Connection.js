@@ -465,7 +465,7 @@ app.get('/obtenerCursosEstudiante', (req,res) => {
 });
 
 app.put("/asignarDocente", (req,res) =>{
-    const sql = "update Curso set cedulaDocente = ? where ID_Curso = ?";
+    const sql = "update Curso set cedulaDocente = ? where id = ?";
     db.query(sql , [req.body.cedula, req.body.idCurso] ,(err, _) => {
         console.log(err);
         res.send(err);
