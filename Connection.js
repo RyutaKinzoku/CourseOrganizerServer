@@ -610,7 +610,7 @@ app.get('/obtenerTarea', (req,res) => {
 
 app.get('/obtenerTareas', (req,res) => {
     const sql = "select * from Tarea where ID_Curso = ?"
-    db.query(sql, [idCurso], (err, result) => {
+    db.query(sql, [req.query.idCurso], (err, result) => {
         if(err){
             res.send(err);
         } else {
