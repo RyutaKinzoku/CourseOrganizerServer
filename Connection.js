@@ -652,6 +652,7 @@ app.get('/obtenerCursosProfesor', (req,res) => {
 });
 
 app.get('/obtenerCursosEstudiante', (req,res) => {
+    console.log(req.query.email)
     const sql = "SELECT Curso.id, Curso.nombre, Curso.gradoEscolar, Curso.cedulaDocente FROM Curso INNER JOIN EstudiantePorCurso ON Curso.id = EstudiantePorCurso.ID_Curso INNER JOIN Estudiante ON EstudiantePorCurso.cedulaEstudiante = Estudiante.cedula where Estudiante.email = ?"
     db.query(sql, [req.query.email], (err, result) => {
         if(err){
