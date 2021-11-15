@@ -177,26 +177,24 @@ app.get('/obtenerDocentes', (_,res) => {
 });
 
 app.post("/calificarDocente", (req,res) =>{
-    var resultados;
     var sql = "select * from Calificacion where cedula_docente = ? and cedula_estudiante = ?";
     db.query(sql , [req.body.cedulaDocente, req.body.cedulaEstudiante] ,(err, result) => {
         if(err){
             res.send(err);
         } else {
-            resultados = result;
+            if(result.length <= 0){
+                sql = "insert into Calificacion (valor, cedula_docente, cedula_estudiante) values(?, ?, ?)"
+                db.query(sql , [req.body.calificacion, req.body.cedulaDocente, req.body.cedulaEstudiante] ,(err, _) => {
+                    res.send(err);
+                })
+            } else {
+                sql = "update Calificacion set valor = ? where cedula_docente = ? and cedula_estudiante = ?"
+                db.query(sql , [req.body.calificacion, req.body.cedulaDocente, req.body.cedulaEstudiante] ,(err, _) => {
+                    res.send(err);
+                })
+            }
         }
     })
-    if(resultados.length <= 0){
-        sql = "insert into Calificacion (valor, cedula_docente, cedula_estudiante) values(?, ?, ?)"
-        db.query(sql , [req.body.calificacion, req.body.cedulaDocente, req.body.cedulaEstudiante] ,(err, _) => {
-            res.send(err);
-        })
-    } else {
-        sql = "update Calificacion set valor = ? where cedula_docente = ? and cedula_estudiante = ?"
-        db.query(sql , [req.body.calificacion, req.body.cedulaDocente, req.body.cedulaEstudiante] ,(err, _) => {
-            res.send(err);
-        })
-    }
 });
 
 app.put('/actualizarDocente', (req,res) => {
@@ -337,39 +335,39 @@ app.post("/borrarCurso", (req,res) =>{
         if(err){
             res.send(err);
         }
-    })
 
-    sql = "delete from Mensaje where ID_Curso = ?";
-    db.query(sql , [idCurso] ,(err, _) => {
-        if(err){
-            res.send(err);
-        }
-    })
+        sql = "delete from Mensaje where ID_Curso = ?";
+        db.query(sql , [idCurso] ,(err, _) => {
+            if(err){
+                res.send(err);
+            }
 
-    sql = "delete from Noticia where ID_Curso = ?";
-    db.query(sql , [idCurso] ,(err, _) => {
-        if(err){
-            res.send(err);
-        }
-    })
+            sql = "delete from Noticia where ID_Curso = ?";
+            db.query(sql , [idCurso] ,(err, _) => {
+                if(err){
+                    res.send(err);
+                }
 
-    sql = "delete from CursoPorDia where ID_Curso = ?";
-    db.query(sql , [idCurso] ,(err, _) => {
-        if(err){
-            res.send(err);
-        }
-    })
+                sql = "delete from CursoPorDia where ID_Curso = ?";
+                db.query(sql , [idCurso] ,(err, _) => {
+                    if(err){
+                        res.send(err);
+                    }
 
-    sql = "delete from EstudiantePorCurso where ID_Curso = ?";
-    db.query(sql , [idCurso] ,(err, _) => {
-        if(err){
-            res.send(err);
-        }
-    })
+                    sql = "delete from EstudiantePorCurso where ID_Curso = ?";
+                    db.query(sql , [idCurso] ,(err, _) => {
+                        if(err){
+                            res.send(err);
+                        }
 
-    sql = "delete from Curso where ID_Curso = ?";
-    db.query(sql , [idCurso] ,(err, _) => {
-        res.send(err);
+                        sql = "delete from Curso where ID_Curso = ?";
+                        db.query(sql , [idCurso] ,(err, _) => {
+                            res.send(err);
+                        })
+                    })
+                })
+            })
+        })
     })
 });
 
