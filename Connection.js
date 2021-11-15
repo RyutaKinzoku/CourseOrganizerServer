@@ -147,12 +147,22 @@ app.post("/borrarDocente", (req,res) =>{
 });
 
 app.get('/obtenerDocente', (req,res) => {
-    const sql = "SELECT d.cedula, d.nombre, d.primerApellido, d.segundoApellido, AVG(c.valor), d.email FROM Docente d INNER JOIN Calificacion c ON c.cedula_docente = d.cedula WHERE d.cedula = ?"
+    const sql = "SELECT d.cedula, d.nombre, d.primerApellido, d.segundoApellido, d.email FROM Docente d WHERE d.cedula = ?"
     db.query(sql, [req.query.cedula], (err, result) => {
         if(err){
             res.send(err);
         }
-        res.send(result[0]);
+        sql = 'SELECT AVG(Calificacion.valor) FROM `Calificacion` WHERE Calificacion.cedula_docente = ? GROUP BY Calificacion.cedula_docente'
+        db.query(sql, [req.query.cedula], (err, resulta) => {
+            if(err){
+                res.send(err);
+            }
+            if(resulta.length > 0){
+                res.send([result[0], resulta[0]]);
+            } else {
+                res.send([result[0], 0]);
+            }
+        })
     })
 });
 
