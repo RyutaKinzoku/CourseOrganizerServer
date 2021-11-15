@@ -372,7 +372,7 @@ app.post("/borrarCurso", (req,res) =>{
 });
 
 app.get('/obtenerCurso', (req,res) => {
-    var sql = "select * from Curso where ID_Curso = ?"
+    var sql = "select * from Curso where id = ?"
     db.query(sql, [req.query.idCurso], (err, result) => {
         if(err){
             res.send(err);
