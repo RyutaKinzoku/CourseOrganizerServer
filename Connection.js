@@ -205,7 +205,7 @@ app.put('/actualizarDocente', (req,res) => {
     const segundoApellido = req.body.segundoApellido; 
     const cedula = req.body.cedula;
     var sql = "update Docente set nombre = ?, primerApellido = ?, segundoApellido = ? where cedula = ?;"
-    db.query(sql, [nombre, primerApellido, segundoApellido, email, cedula], (err, _) => {
+    db.query(sql, [nombre, primerApellido, segundoApellido, cedula], (err, _) => {
         res.send(err);
     })
     sql = "update Persona set nombre = ?, primerApellido = ?, segundoApellido = ? where cedula = ?;"
@@ -308,7 +308,7 @@ app.put('/actualizarEstudiante', (req,res) => {
     const segundoApellido = req.body.segundoApellido; 
     const grado = req.body.grado; 
     var sql = "update Estudiante set nombre = ?, primerApellido = ?, segundoApellido = ?, gradoEscolar = ? where cedula = ?;"
-    db.query(sql, [nombre, primerApellido, segundoApellido, email, grado, cedula], (err, _) => {
+    db.query(sql, [nombre, primerApellido, segundoApellido, grado, cedula], (err, _) => {
         if(err){
             res.send(err);
         }
