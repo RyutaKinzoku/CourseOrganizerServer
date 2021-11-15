@@ -206,11 +206,13 @@ app.put('/actualizarDocente', (req,res) => {
     const cedula = req.body.cedula;
     var sql = "update Docente set nombre = ?, primerApellido = ?, segundoApellido = ? where cedula = ?;"
     db.query(sql, [nombre, primerApellido, segundoApellido, cedula], (err, _) => {
-        res.send(err);
-    })
-    sql = "update Persona set nombre = ?, primerApellido = ?, segundoApellido = ? where cedula = ?;"
-    db.query(sql, [nombre, primerApellido, segundoApellido, cedula], (err, _) => {
-        res.send(err);
+        if(err){
+            res.send(err);
+        }
+        sql = "update Persona set nombre = ?, primerApellido = ?, segundoApellido = ? where cedula = ?;"
+        db.query(sql, [nombre, primerApellido, segundoApellido, cedula], (err, _) => {
+            res.send(err);
+        })
     })
 });
 
@@ -312,10 +314,10 @@ app.put('/actualizarEstudiante', (req,res) => {
         if(err){
             res.send(err);
         }
-    })
-    sql = "update Persona set nombre = ?, primerApellido = ?, segundoApellido = ? where cedula = ?;"
-    db.query(sql, [nombre, primerApellido, segundoApellido, cedula], (err, _) => {
-        res.send(err);
+        sql = "update Persona set nombre = ?, primerApellido = ?, segundoApellido = ? where cedula = ?;"
+        db.query(sql, [nombre, primerApellido, segundoApellido, cedula], (err, _) => {
+            res.send(err);
+        })
     })
 });
 
