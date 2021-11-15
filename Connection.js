@@ -116,11 +116,12 @@ app.post("/borrarDocente", (req,res) =>{
     var email;
 
     var sql = "select email from Persona where cedula = ?";
+    console.log("CEDULAAA: " + cedula);
     db.query(sql , [cedula] ,(err, result) => {
         if(err){
             res.send(err);
         } else {
-            email = result;
+            email = result.email;
 
             sql = "delete from Docente where cedula = ?";
             db.query(sql , [cedula] ,(err, _) => {
